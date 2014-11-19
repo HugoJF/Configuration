@@ -24,39 +24,27 @@ public class Configuration {
 		Configuration.config.put(key, value);
 	}
 
+	public static void setCommand(String command) {
+		Configuration.config.put(command, "true");
+	}
+
 	public static String getConfiguration(String key) {
 		return Configuration.config.get(key);
 	}
 
-	public static void readFromRunArgs(String[] args) {
-		for (int i = 0; i < args.length; i++) {
-			if (Configuration.parameterExists(args[i])) {
-				String key = args[i].substring(1);
-				String value = args[i + 1];
-				Configuration.setConfiguration(key, value);
-				Configuration.validParametersSet++;
-			} else if (Configuration.parameterIsCommand(args[i])) {
-				Configuration.setConfiguration(args[i], "1");
-				Configuration.validCommandsSet++;
-			}
-		}
-	}
-
-	private static boolean parameterExists(String p) {
-		for (String s : Configuration.validParameters) {
-			if (("-" + s).equals(p))
-				return true;
-		}
+	public static boolean getCommand(String command) {
+		String s = (String) Configuration.config.get(command);
+		if (s.equalsIgnoreCase("true"))
+			return true;
 		return false;
 	}
 
-	private static boolean parameterIsCommand(String p) {
-		for (String s : Configuration.validCommands) {
-			if (("-" + s).equals(p)) {
-				return true;
-			}
-		}
-		return false;
+	public static void addNewValidParameter(String s) {
+		Configuration.validParameters.add(s);
+	}
+
+	public static void addNewValidCommand(String s) {
+		Configuration.validCommands.add(s);
 	}
 
 	public static void readFromFile(File path) throws IOException {
@@ -76,6 +64,20 @@ public class Configuration {
 		reader.close();
 	}
 
+	public static void readFromRunArgs(String[] args) {
+		for (int i = 0; i < args.length; i++) {
+			if (Configuration.parameterExists(args[i])) {
+				String key = args[i].substring(1);
+				String value = args[i + 1];
+				Configuration.setConfiguration(key, value);
+				Configuration.validParametersSet++;
+			} else if (Configuration.parameterIsCommand(args[i])) {
+				Configuration.setConfiguration(args[i], "1");
+				Configuration.validCommandsSet++;
+			}
+		}
+	}
+
 	public static void debugParameters() {
 		LOGGER.info("LOADED PARAMETERS DEBUGGING");
 		for (String key : Configuration.config.keySet()) {
@@ -83,11 +85,20 @@ public class Configuration {
 		}
 	}
 
-	public static void addNewValidParameter(String s) {
-		Configuration.validParameters.add(s);
+	private static boolean parameterIsCommand(String p) {
+		for (String s : Configuration.validCommands) {
+			if (("-" + s).equals(p)) {
+				return true;
+			}
+		}
+		return false;
 	}
 
-	public static void addNewValidCommand(String s) {
-		Configuration.validCommands.add(s);
+	private static boolean parameterExists(String p) {
+		for (String s : Configuration.validParameters) {
+			if (("-" + s).equals(p))
+				return true;
+		}
+		return false;
 	}
 }
