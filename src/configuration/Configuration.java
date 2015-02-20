@@ -14,6 +14,8 @@ public class Configuration {
 
 	private static ArrayList<String> validParameters = new ArrayList<String>();
 	private static ArrayList<String> validCommands = new ArrayList<String>();
+	
+	private static ArrayList<String> neededParameters = new ArrayList<String>();
 
 	public static int validParametersSet = 0;
 	public static int validCommandsSet = 0;
@@ -34,13 +36,15 @@ public class Configuration {
 
 	public static boolean getCommand(String command) {
 		String s = (String) Configuration.config.get(command);
+		if(s == null) return false;
 		if (s.equalsIgnoreCase("true"))
 			return true;
 		return false;
 	}
 
-	public static void addNewValidParameter(String s) {
+	public static void addNewValidParameter(String s, boolean needed) {
 		Configuration.validParameters.add(s);
+		if(needed) neededParameters.add(s);
 	}
 
 	public static void addNewValidCommand(String s) {
@@ -57,7 +61,7 @@ public class Configuration {
 				Configuration.setConfiguration(parts[0], parts[1]);
 				Configuration.validParametersSet++;
 			} else if (Configuration.parameterIsCommand(parts[0])) {
-				Configuration.setConfiguration(parts[0], "1");
+				Configuration.setConfiguration(parts[0], "true");
 				Configuration.validCommandsSet++;
 			}
 		}
@@ -72,7 +76,7 @@ public class Configuration {
 				Configuration.setConfiguration(key, value);
 				Configuration.validParametersSet++;
 			} else if (Configuration.parameterIsCommand(args[i])) {
-				Configuration.setConfiguration(args[i], "1");
+				Configuration.setConfiguration(args[i].substring(2), "true");
 				Configuration.validCommandsSet++;
 			}
 		}
@@ -87,7 +91,7 @@ public class Configuration {
 
 	private static boolean parameterIsCommand(String p) {
 		for (String s : Configuration.validCommands) {
-			if (("-" + s).equals(p)) {
+			if (("--" + s).equals(p)) {
 				return true;
 			}
 		}
@@ -100,5 +104,18 @@ public class Configuration {
 				return true;
 		}
 		return false;
+	}
+
+	public static void verifyArgs() throws MissingArgumentsException {
+		for (String s : Configuration.neededParameters) {
+			if(!Configuration.config.containsKey(s)) {
+				throw new MissingArgumentsException("Missing needed argument: " + s);
+			}
+		}
+		
+	}
+	
+	public static HashMap<String, String> getConfig() {
+		return config;
 	}
 }
