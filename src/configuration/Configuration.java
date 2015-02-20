@@ -36,6 +36,7 @@ public class Configuration {
 
 	public static boolean getCommand(String command) {
 		String s = (String) Configuration.config.get(command);
+		if(s == null) return false;
 		if (s.equalsIgnoreCase("true"))
 			return true;
 		return false;
@@ -60,7 +61,7 @@ public class Configuration {
 				Configuration.setConfiguration(parts[0], parts[1]);
 				Configuration.validParametersSet++;
 			} else if (Configuration.parameterIsCommand(parts[0])) {
-				Configuration.setConfiguration(parts[0], "1");
+				Configuration.setConfiguration(parts[0], "true");
 				Configuration.validCommandsSet++;
 			}
 		}
@@ -75,7 +76,7 @@ public class Configuration {
 				Configuration.setConfiguration(key, value);
 				Configuration.validParametersSet++;
 			} else if (Configuration.parameterIsCommand(args[i])) {
-				Configuration.setConfiguration(args[i], "1");
+				Configuration.setConfiguration(args[i].substring(2), "true");
 				Configuration.validCommandsSet++;
 			}
 		}
@@ -112,5 +113,9 @@ public class Configuration {
 			}
 		}
 		
+	}
+	
+	public static HashMap<String, String> getConfig() {
+		return config;
 	}
 }
