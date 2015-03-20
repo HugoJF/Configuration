@@ -60,7 +60,7 @@ public class Configuration {
 	 * Return value for set command or parameter
 	 * 
 	 * @param key - command or parameter name
-	 * @return - the command/parameter set value
+	 * @return the command/parameter set value
 	 */
 	public static String getConfiguration(String key) {
 		return Configuration.config.get(key);
@@ -70,14 +70,12 @@ public class Configuration {
 	 * Check if command is set
 	 * 
 	 * @param command - the command name
-	 * @return - true if command if set, false if it's not
+	 * @return true if command if set, false if it's not
 	 */
 	public static boolean isCommandSet(String command) {
 		String s = (String) Configuration.config.get(command);
-		if (s == null)
-			return false;
-		if (s.equalsIgnoreCase("true"))
-			return true;
+		if (s == null) return false;
+		if (s.equalsIgnoreCase("true")) return true;
 		return false;
 	}
 
@@ -90,8 +88,7 @@ public class Configuration {
 	 */
 	public static void addNewValidParameter(String s, boolean needed) {
 		Configuration.validParameters.add(s);
-		if (needed)
-			neededParameters.add(s);
+		if (needed) neededParameters.add(s);
 	}
 
 	/**
@@ -116,7 +113,7 @@ public class Configuration {
 	 * Reads the entire configuration set from a file
 	 * 
 	 * @param path - a File object containing config file
-	 * @throws IOException - any error caused by reading the file
+	 * @throws IOException any error caused by reading the file
 	 */
 	public static void readFromFile(File path) throws IOException {
 		BufferedReader reader = new BufferedReader(new FileReader(path.getAbsolutePath()));
@@ -186,8 +183,7 @@ public class Configuration {
 	 */
 	private static boolean parameterExists(String p) {
 		for (String s : Configuration.validParameters) {
-			if (("-" + s).equals(p))
-				return true;
+			if (("-" + s).equals(p)) return true;
 		}
 		return false;
 	}
@@ -195,7 +191,7 @@ public class Configuration {
 	/**
 	 * Verify if all needed parameters are set
 	 * 
-	 * @throws Exception - a missing needed parameter
+	 * @throws Exception a missing needed parameter
 	 */
 	public static void verifyArgs() throws Exception {
 		for (String s : Configuration.neededParameters) {
@@ -209,7 +205,7 @@ public class Configuration {
 	/**
 	 * Return raw configuration HashMap
 	 * 
-	 * @return - config HashMap<String, String>
+	 * @return config HashMap<String, String>
 	 */
 	public static HashMap<String, String> getConfig() {
 		return config;
