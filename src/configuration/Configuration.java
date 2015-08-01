@@ -65,6 +65,54 @@ public class Configuration {
 	public String getConfiguration(String key) {
 		return this.config.get(key);
 	}
+	
+	/**
+	 * Return value for set command or parameter
+	 * 
+	 * @param key - command or parameter name
+	 * @return the command/parameter set value
+	 */
+	public int getConfigurationAsInt(String key) {
+		return Integer.valueOf(this.getConfiguration(key));
+	}
+	
+	/**
+	 * Return value for set command or parameter
+	 * 
+	 * @param key - command or parameter name
+	 * @return the command/parameter set value
+	 */
+	public long getConfigurationAsLong(String key) {
+		return Long.valueOf(this.getConfiguration(key));
+	}
+	
+	/**
+	 * Return value for set command or parameter
+	 * 
+	 * @param key - command or parameter name
+	 * @return the command/parameter set value
+	 */
+	public boolean getConfigurationAsBoolean(String key) {
+		return Boolean.valueOf(this.getConfiguration(key));
+	}
+	/**
+	 * Return value for set command or parameter
+	 * 
+	 * @param key - command or parameter name
+	 * @return the command/parameter set value
+	 */
+	public double getConfigurationAsDouble(String key) {
+		return Double.valueOf(this.getConfiguration(key));
+	}
+	/**
+	 * Return value for set command or parameter
+	 * 
+	 * @param key - command or parameter name
+	 * @return the command/parameter set value
+	 */
+	public float getConfigurationAsFloat(String key) {
+		return Float.valueOf(this.getConfiguration(key));
+	}
 
 	/**
 	 * Check if command is set
