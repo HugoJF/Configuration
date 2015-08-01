@@ -207,7 +207,7 @@ public class Configuration {
 	 * 
 	 * @return config HashMap<String, String>
 	 */
-	public HashMap<String, String> getConfig() {
+	public HashMap<String, String> getConfigHashMap() {
 		return config;
 	}
 }
