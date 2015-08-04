@@ -29,8 +29,8 @@ public class Configuration {
 	/**
 	 * Counters for valid parameters and commands
 	 */
-	public int validParametersSet = 0;
-	public int validCommandsSet = 0;
+	private int validParametersSet = 0;
+	private int validCommandsSet = 0;
 
 	/**
 	 * The log4j class
@@ -257,5 +257,21 @@ public class Configuration {
 	 */
 	public HashMap<String, String> getConfigHashMap() {
 		return config;
+	}
+
+	public int getValidParametersSet() {
+		return validParametersSet;
+	}
+
+	public void setValidParametersSet(int validParametersSet) {
+		this.validParametersSet = validParametersSet;
+	}
+
+	public int getValidCommandsSet() {
+		return validCommandsSet;
+	}
+
+	public void setValidCommandsSet(int validCommandsSet) {
+		this.validCommandsSet = validCommandsSet;
 	}
 }
