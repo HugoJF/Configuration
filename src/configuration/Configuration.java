@@ -6,6 +6,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.EnumMap;
 
 import org.apache.log4j.Logger;
 
@@ -33,6 +34,11 @@ public class Configuration {
 	private int validCommandsSet = 0;
 
 	/**
+	 * EnumMap holding the string keys
+	 */
+	private EnumMap<?, String> keyMap;
+
+	/**
 	 * The log4j class
 	 */
 	private final Logger LOGGER = Logger.getLogger(Configuration.class);
@@ -48,12 +54,31 @@ public class Configuration {
 	}
 
 	/**
+	 * Added parameter and it's value to the configuration HashMap
+	 * 
+	 * @param key - the parameter name
+	 * @param value - the parameter value
+	 */
+	public <E extends Enum<E>> void setConfiguration(E e, String value) {
+		this.config.put(this.keyMap.get(e), value);
+	}
+
+	/**
 	 * Set command as executed
 	 * 
 	 * @param command - the command to be executed
 	 */
 	public void setCommand(String command) {
 		this.config.put(command, "true");
+	}
+
+	/**
+	 * Set command as executed
+	 * 
+	 * @param command - the command to be executed
+	 */
+	public <E extends Enum<E>> void setCommand(E e) {
+		this.config.put(this.keyMap.get(e), "true");
 	}
 
 	/**
@@ -65,7 +90,17 @@ public class Configuration {
 	public String getConfiguration(String key) {
 		return this.config.get(key);
 	}
-	
+
+	/**
+	 * Return value for set command or parameter
+	 * 
+	 * @param key - command or parameter name
+	 * @return the command/parameter set value
+	 */
+	public <E extends Enum<E>> String getConfiguration(E e) {
+		return this.config.get(this.keyMap.get(e));
+	}
+
 	/**
 	 * Return value for set command or parameter
 	 * 
@@ -75,7 +110,17 @@ public class Configuration {
 	public int getConfigurationAsInt(String key) {
 		return Integer.valueOf(this.getConfiguration(key));
 	}
-	
+
+	/**
+	 * Return value for set command or parameter
+	 * 
+	 * @param key - command or parameter name
+	 * @return the command/parameter set value
+	 */
+	public <E extends Enum<E>> int getConfigurationAsInt(E e) {
+		return Integer.valueOf(this.getConfiguration(this.keyMap.get(e)));
+	}
+
 	/**
 	 * Return value for set command or parameter
 	 * 
@@ -85,7 +130,17 @@ public class Configuration {
 	public long getConfigurationAsLong(String key) {
 		return Long.valueOf(this.getConfiguration(key));
 	}
-	
+
+	/**
+	 * Return value for set command or parameter
+	 * 
+	 * @param key - command or parameter name
+	 * @return the command/parameter set value
+	 */
+	public <E extends Enum<E>> long getConfigurationAsLong(E e) {
+		return Long.valueOf(this.getConfiguration(this.keyMap.get(e)));
+	}
+
 	/**
 	 * Return value for set command or parameter
 	 * 
@@ -95,6 +150,17 @@ public class Configuration {
 	public boolean getConfigurationAsBoolean(String key) {
 		return Boolean.valueOf(this.getConfiguration(key));
 	}
+
+	/**
+	 * Return value for set command or parameter
+	 * 
+	 * @param key - command or parameter name
+	 * @return the command/parameter set value
+	 */
+	public <E extends Enum<E>> boolean getConfigurationAsBoolean(E e) {
+		return Boolean.valueOf(this.getConfiguration(this.keyMap.get(e)));
+	}
+
 	/**
 	 * Return value for set command or parameter
 	 * 
@@ -104,6 +170,17 @@ public class Configuration {
 	public double getConfigurationAsDouble(String key) {
 		return Double.valueOf(this.getConfiguration(key));
 	}
+
+	/**
+	 * Return value for set command or parameter
+	 * 
+	 * @param key - command or parameter name
+	 * @return the command/parameter set value
+	 */
+	public <E extends Enum<E>> double getConfigurationAsDouble(E e) {
+		return Double.valueOf(this.getConfiguration(this.keyMap.get(e)));
+	}
+
 	/**
 	 * Return value for set command or parameter
 	 * 
@@ -115,6 +192,16 @@ public class Configuration {
 	}
 
 	/**
+	 * Return value for set command or parameter
+	 * 
+	 * @param key - command or parameter name
+	 * @return the command/parameter set value
+	 */
+	public <E extends Enum<E>> float getConfigurationAsFloat(E e) {
+		return Float.valueOf(this.getConfiguration(this.keyMap.get(e)));
+	}
+
+	/**
 	 * Check if command is set
 	 * 
 	 * @param command - the command name
@@ -122,8 +209,25 @@ public class Configuration {
 	 */
 	public boolean isCommandSet(String command) {
 		String s = (String) this.config.get(command);
-		if (s == null) return false;
-		if (s.equalsIgnoreCase("true")) return true;
+		if (s == null)
+			return false;
+		if (s.equalsIgnoreCase("true"))
+			return true;
+		return false;
+	}
+
+	/**
+	 * Check if command is set
+	 * 
+	 * @param command - the command name
+	 * @return true if command if set, false if it's not
+	 */
+	public <E extends Enum<E>> boolean isCommandSet(E e) {
+		String s = (String) this.config.get(this.keyMap.get(e));
+		if (s == null)
+			return false;
+		if (s.equalsIgnoreCase("true"))
+			return true;
 		return false;
 	}
 
@@ -131,12 +235,24 @@ public class Configuration {
 	 * Adds a new valid parameter to be set
 	 * 
 	 * @param s - the parameter name to be added
-	 * @param needed - if it's required for execution, verifyArgs() throw error
-	 *        if a needed parameter is not set
+	 * @param needed - if it's required for execution, verifyArgs() throw error if a needed parameter is not set
 	 */
 	public void addNewValidParameter(String s, boolean needed) {
 		this.validParameters.add(s);
-		if (needed) neededParameters.add(s);
+		if (needed)
+			neededParameters.add(s);
+	}
+
+	/**
+	 * Adds a new valid parameter to be set
+	 * 
+	 * @param s - the parameter name to be added
+	 * @param needed - if it's required for execution, verifyArgs() throw error if a needed parameter is not set
+	 */
+	public <E extends Enum<E>> void addNewValidParameter(E e, boolean needed) {
+		this.validParameters.add(this.keyMap.get(e));
+		if (needed)
+			neededParameters.add(this.keyMap.get(e));
 	}
 
 	/**
@@ -149,12 +265,30 @@ public class Configuration {
 	}
 
 	/**
+	 * Adds a new valid parameter to be set defaulted to not be needed
+	 * 
+	 * @param s - the parameter name to be added
+	 */
+	public <E extends Enum<E>> void addNewValidParameter(E e) {
+		this.validParameters.add(this.keyMap.get(e));
+	}
+
+	/**
 	 * Adds a new valid command to be set
 	 * 
 	 * @param s - the command name to be added
 	 */
 	public void addNewValidCommand(String s) {
 		this.validCommands.add(s);
+	}
+
+	/**
+	 * Adds a new valid command to be set
+	 * 
+	 * @param s - the command name to be added
+	 */
+	public <E extends Enum<E>> void addNewValidCommand(E e) {
+		this.validCommands.add(this.keyMap.get(e));
 	}
 
 	/**
@@ -198,8 +332,7 @@ public class Configuration {
 	}
 
 	/**
-	 * Print entire configuration key set, containing all set command and/or
-	 * parameters
+	 * Print entire configuration key set, containing all set command and/or parameters
 	 */
 	public void debugParameters() {
 		LOGGER.info("LOADED PARAMETERS DEBUGGING");
@@ -231,7 +364,8 @@ public class Configuration {
 	 */
 	private boolean parameterExists(String p) {
 		for (String s : this.validParameters) {
-			if (("-" + s).equals(p)) return true;
+			if (("-" + s).equals(p))
+				return true;
 		}
 		return false;
 	}
@@ -259,19 +393,17 @@ public class Configuration {
 		return config;
 	}
 
+	/**
+	 * @return the valid parameters set amount
+	 */
 	public int getValidParametersSet() {
 		return validParametersSet;
 	}
 
-	public void setValidParametersSet(int validParametersSet) {
-		this.validParametersSet = validParametersSet;
-	}
-
+	/**
+	 * @return the valid commands set amount
+	 */
 	public int getValidCommandsSet() {
 		return validCommandsSet;
-	}
-
-	public void setValidCommandsSet(int validCommandsSet) {
-		this.validCommandsSet = validCommandsSet;
 	}
 }
